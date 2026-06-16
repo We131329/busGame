@@ -1,0 +1,55 @@
+{
+    "table": {},
+    "player": {
+        "passengers_boarded": {
+            "id": 10,
+            "name": "Passengers boarded",
+            "type": "int"
+        },
+        "passengers_departed": {
+            "id": 11,
+            "name": "Passengers departed",
+            "type": "int"
+        },
+        "unhappy_passengers": {
+            "id": 12,
+            "name": "Unhappy passengers",
+            "type": "int"
+        },
+        "happy_lovers": {
+            "id": 13,
+            "name": "Happy Lovers pairs",
+            "type": "int"
+        },
+        "unhappy_lovers": {
+            "id": 14,
+            "name": "Unhappy Lovers",
+            "type": "int"
+        },
+        "star_abilities_activated": {
+            "id": 15,
+            "name": "Star abilities activated",
+            "type": "int"
+        },
+        "hand_passengers_round1": {
+            "id": 16,
+            "name": "Passengers in hand at end of Round 1",
+            "type": "int"
+        },
+        "hand_passengers_round2": {
+            "id": 17,
+            "name": "Passengers in hand at end of Round 2",
+            "type": "int"
+        },
+        "round1_points": {
+            "id": 18,
+            "name": "Round 1 points",
+            "type": "int"
+        },
+        "round2_points": {
+            "id": 19,
+            "name": "Round 2 points",
+            "type": "int"
+        }
+    }
+}
