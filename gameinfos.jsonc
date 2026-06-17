@@ -9,16 +9,16 @@
     "game_name": "BUUUUUUUUS",
 
     // Game publisher (use empty string if there is no publisher)
-    "publisher": "",
+    "publisher": "Spiel-ou-Face",
 
     // Url of game publisher website
-    "publisher_website": "",
+    "publisher_website": "http://www.spiel-ou-face.com/",
 
     // Board Game Geek ID of the publisher
-    "publisher_bgg_id": 0,
+    "publisher_bgg_id": 73,
 
     // Board game geek ID of the game
-    "bgg_id": 0,
+    "bgg_id": 466635,
 
     // Players configuration that can be played (ex: 2 to 4 players)
     "players": [2, 3, 4],
@@ -32,16 +32,16 @@
     // "not_recommend_player_number": [2, 3],      // <= example: this is not recommended to play this game with 2 or 3 players
 
     // Estimated game duration, in minutes (used only for the launch, afterward the real duration is computed)
-    "estimated_duration": 30,
+    "estimated_duration": 40,
 
     // Time in second add to a player when "giveExtraTime" is called (speed profile = fast)
-    "fast_additional_time": 30,
+    "fast_additional_time": 40,
 
     // Time in second add to a player when "giveExtraTime" is called (speed profile = medium)
-    "medium_additional_time": 40,
+    "medium_additional_time": 60,
 
     // Time in second add to a player when "giveExtraTime" is called (speed profile = slow)
-    "slow_additional_time": 50,
+    "slow_additional_time": 90,
 
     // If you are using a tie breaker in your game (using "player_score_aux"), you must describe here
     // the formula used to compute "player_score_aux". This description will be used as a tooltip to explain
@@ -49,7 +49,7 @@
     // Note: if you are NOT using any tie breaker, leave the empty string.
     //
     // Example: "tie_breaker_description": "Number of remaining cards in hand",
-    "tie_breaker_description": "",
+    "tie_breaker_description": "The player with the most Passengers wins",
 
     // If in the game, all losers are equal (no score to rank them or explicit in the rules that losers are not ranked between them), set this to true
     // The game end result will display "Winner" for the 1st player and "Loser" for all other players
