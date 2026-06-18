@@ -78,7 +78,7 @@ class WaitingRoom extends GameState
         
         $ids = array_filter(array_map('intval', explode(',', $passengerIds)));
         if (empty($ids)) {
-             throw new UserException($this->game->_("Select at least one passenger or click Skip"));
+             throw new UserException(clienttranslate("Select at least one passenger or click Skip"));
         }
 
         $this->game->setGameStateValue('pending_boarding_passengers', 0);
@@ -201,7 +201,7 @@ class WaitingRoom extends GameState
     {
         $busId = (int) $this->game->getGameStateValue('active_bus_id');
         if ($this->hasEligiblePassengers($busId)) {
-             throw new UserException($this->game->_("You must board all eligible passengers from the Waiting Room"));
+             throw new UserException(clienttranslate("You must board all eligible passengers from the Waiting Room"));
         }
         return TravelersHand::class;
     }

@@ -36,22 +36,22 @@ if (!defined('PASSENGER_ANONYMOUS')) {
 $this->colors = [
     COLOR_BLUE => [
         'name' => clienttranslate('Blue'),
-        'nametr' => self::_('Blue'),
+        'nametr' => clienttranslate('Blue'),
         'color' => '0000ff',
     ],
     COLOR_RED => [
         'name' => clienttranslate('Red'),
-        'nametr' => self::_('Red'),
+        'nametr' => clienttranslate('Red'),
         'color' => 'ff0000',
     ],
     COLOR_GREEN => [
         'name' => clienttranslate('Green'),
-        'nametr' => self::_('Green'),
+        'nametr' => clienttranslate('Green'),
         'color' => '00ff00',
     ],
     COLOR_YELLOW => [
         'name' => clienttranslate('Yellow'),
-        'nametr' => self::_('Yellow'),
+        'nametr' => clienttranslate('Yellow'),
         'color' => 'ffff00',
     ],
 ];

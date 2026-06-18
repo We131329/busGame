@@ -56,13 +56,13 @@ class CorrupterSwap extends GameState
         // 1. Verify hand card is a traveler in player's hand
         $handCard = $this->game->cards->getCard($handCardId);
         if (!$handCard || $handCard->location !== 'hand' || (int)$handCard->location_arg !== $playerId || $handCard->type !== 'passenger') {
-            throw new UserException($this->game->_("You must select a passenger from your hand"));
+            throw new UserException(clienttranslate("You must select a passenger from your hand"));
         }
         
         // 2. Verify target card
         $targetCard = $this->game->cards->getCard($targetCardId);
         if (!$targetCard || $targetCard->type !== 'passenger') {
-            throw new UserException($this->game->_("Target must be a passenger"));
+            throw new UserException(clienttranslate("Target must be a passenger"));
         }
         
         $targetBusId = null;
@@ -78,10 +78,10 @@ class CorrupterSwap extends GameState
             $handAbility = $handCard->type_arg % 10;
             
             if ($handCardColor !== $busColor && $handAbility !== PASSENGER_BACKPACKER) {
-                 throw new UserException($this->game->_("The passenger from your hand must match the color of the bus"));
+                 throw new UserException(clienttranslate("The passenger from your hand must match the color of the bus"));
             }
         } else {
-            throw new UserException($this->game->_("Invalid target for swap. Must be in Waiting Room or in a Bus."));
+            throw new UserException(clienttranslate("Invalid target for swap. Must be in Waiting Room or in a Bus."));
         }
         
         // 3. Perform Swap

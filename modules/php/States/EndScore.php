@@ -93,23 +93,19 @@ class EndScore extends \Bga\GameFramework\States\GameState
             $this->game->bga->playerStats->set($roundStat, $scoreDetails['total'], $pId);
 
             // Update DB
-            $sql = "UPDATE player SET player_score = player_score + {$scoreDetails['total']} WHERE player_id = $pId";
-            Game::DbQuery($sql);
+            $this->game->bga->playerScore->inc($scoreDetails['total'], $pId);
 
             // Tiebreaker: Most Passengers (only at the end of Round 2)
             if ($round === 2) {
                 $totalPassengers = count($passengers);
-                Game::DbQuery("UPDATE player SET player_score_aux = $totalPassengers WHERE player_id = $pId");
+                $this->game->bga->playerScoreAux->set($totalPassengers, $pId);
             }
         }
 
         // Get updated scores from database
-        $updatedPlayers = $this->game->getCollectionFromDb(
-            "SELECT player_id, player_score FROM player"
-        );
         $newScores = [];
-        foreach ($updatedPlayers as $pId => $player) {
-            $newScores[(int)$pId] = (int)$player['player_score'];
+        foreach ($players as $pId => $player) {
+            $newScores[(int)$pId] = $this->game->bga->playerScore->get((int)$pId);
         }
 
         $this->game->bga->notify->all("scoring", clienttranslate('End of Round ${round} scoring!'), [

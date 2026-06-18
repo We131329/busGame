@@ -1815,9 +1815,9 @@ export class Game {
     notif_scoring(args) {
         // Update the score counters in the BGA top panel
         Object.keys(args.new_scores).forEach(pId => {
-            const scoreCtrl = this.bga.gameui.scoreCtrl[pId];
-            if (scoreCtrl) {
-                scoreCtrl.toValue(args.new_scores[pId]);
+            const scoreCounter = this.bga.playerPanels.getScoreCounter(pId);
+            if (scoreCounter) {
+                scoreCounter.toValue(args.new_scores[pId]);
             }
         });
 

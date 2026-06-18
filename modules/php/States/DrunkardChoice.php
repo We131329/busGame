@@ -46,12 +46,12 @@ class DrunkardChoice extends GameState
         
         // Max 2 victims
         if (count($ids) > 2) {
-             throw new UserException($this->game->_("Select at most 2 victims"));
+             throw new UserException(clienttranslate("Select at most 2 victims"));
         }
         
         // If there are others available, must select up to 2
         if (count($ids) < min(2, count($passengers))) {
-             throw new UserException($this->game->_("You must select more victims"));
+             throw new UserException(clienttranslate("You must select more victims"));
         }
 
         // Verify victims are on the bus
@@ -64,7 +64,7 @@ class DrunkardChoice extends GameState
                 }
             }
             if (!$found) {
-                throw new UserException($this->game->_("One of the selected victims is not on the bus"));
+                throw new UserException(clienttranslate("One of the selected victims is not on the bus"));
             }
         }
 

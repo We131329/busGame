@@ -143,7 +143,7 @@ class ActiveBus extends GameState
     {
         $args = $this->getArgs();
         if (!$args['canTriggerEnd']) {
-            throw new UserException($this->game->_("You can still take actions"));
+            throw new UserException(clienttranslate("You can still take actions"));
         }
 
         $playerId = (int) $this->game->getActivePlayerId();
@@ -178,7 +178,7 @@ class ActiveBus extends GameState
         $star = $this->game->cards->getCardsInLocation('hand', $playerId);
         $star = array_filter($star, fn($c) => $c->id === $starId && $c->type_arg % 10 === PASSENGER_STAR);
         if (empty($star)) {
-             throw new UserException($this->game->_("You don't have a Star in hand"));
+             throw new UserException(clienttranslate("You don't have a Star in hand"));
         }
         $star = reset($star);
         $starColor = (int) floor($star->type_arg / 10);
@@ -187,17 +187,17 @@ class ActiveBus extends GameState
         $sql = "SELECT * FROM card WHERE card_id = $busId";
         $bus = $this->game->getObjectFromDB($sql);
         if (!$bus || $bus['card_type'] !== 'bus') {
-             throw new UserException($this->game->_("Selected card is not a bus"));
+             throw new UserException(clienttranslate("Selected card is not a bus"));
         }
         
         $busColor = (int) floor((int)$bus['card_type_arg'] / 10);
         if ($busColor !== $starColor) {
-             throw new UserException($this->game->_("The Star can only call a bus of the same color"));
+             throw new UserException(clienttranslate("The Star can only call a bus of the same color"));
         }
 
         $validLocations = ['garage', 'departed_buses'];
         if (!in_array($bus['card_location'], $validLocations)) {
-             throw new UserException($this->game->_("You can only call a bus from the Garage or Departed buses"));
+             throw new UserException(clienttranslate("You can only call a bus from the Garage or Departed buses"));
         }
         
         // 3. Move bus to Platform
@@ -244,23 +244,23 @@ class ActiveBus extends GameState
         $sql = "SELECT * FROM card WHERE card_id = $cardId";
         $cardRow = $this->game->getObjectFromDB($sql);
         if (!$cardRow) {
-            throw new UserException($this->game->_("Card not found"));
+            throw new UserException(clienttranslate("Card not found"));
         }
         
         if ($cardRow['card_type'] !== 'bus') {
-            throw new UserException($this->game->_("Selected card is not a bus"));
+            throw new UserException(clienttranslate("Selected card is not a bus"));
         }
         
         if ($cardRow['card_location'] === 'hand' && (int)$cardRow['card_location_arg'] !== $playerId) {
-            throw new UserException($this->game->_("This bus is not in your hand"));
+            throw new UserException(clienttranslate("This bus is not in your hand"));
         }
         
         if ($cardRow['card_location'] !== 'hand' && $cardRow['card_location'] !== 'platform') {
-             throw new UserException($this->game->_("This bus is not available"));
+             throw new UserException(clienttranslate("This bus is not available"));
         }
 
         if ($cardRow['card_location'] === 'platform' && $this->game->isBusStalled($cardId)) {
-             throw new UserException($this->game->_("This bus is stalled and cannot be selected"));
+             throw new UserException(clienttranslate("This bus is stalled and cannot be selected"));
         }
 
         // If it was in hand, move it to platform
