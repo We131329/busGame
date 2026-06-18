@@ -89,12 +89,20 @@ class ActiveBus {
         } else {
             this.game.setSelectable('bus', true, 'my-hand-buses');
             
-            document.querySelectorAll('#platform .buu_card.buu_bus').forEach(el => {
-                const isStalled = this.game.isBusStalled(el.dataset.id);
-                const hasGeneral = this.args.hasGeneral;
+            // Buses on the platform
+            const platformBuses = document.querySelectorAll('#platform .buu_card.buu_bus');
+            if (platformBuses.length === 0) {
+                console.warn("No buses found on platform for selectability check");
+            }
+
+            platformBuses.forEach(el => {
+                const busId = el.dataset.id;
+                const isStalled = this.game.isBusStalled(busId);
                 
-                if (!isStalled || hasGeneral) {
+                if (!isStalled) {
                     el.classList.add('buu_selectable');
+                } else {
+                    el.classList.add('buu_unselectable-visual');
                 }
             });
         }
@@ -1108,6 +1116,11 @@ export class Game {
         dialog.setTitle(_("How to Play - BUUUUUUUUS"));
         dialog.setContent(this.getHelpHtml());
         dialog.show();
+        
+        const underlayId = 'popin_bgaHelpDialog_underlay';
+        if (document.getElementById(underlayId)) {
+            document.getElementById(underlayId).addEventListener('click', () => dialog.hide());
+        }
     }
 
     getHelpHtml() {
@@ -1128,7 +1141,7 @@ export class Game {
                     <li><span class="buu_help-ability-name">${_("Anonymous")}</span>: ${_("No special skill.")}</li>
                     <li><span class="buu_help-ability-name">${_("Surfer")}</span>: ${_("Needs at least 2 empty spaces to board.")}</li>
                     <li><span class="buu_help-ability-name">${_("Lovers")}</span>: ${_("Always travel in pairs. If a bus reaches its max capacity with only one lover on board, the bus 'stalls' until the partner joins.")}</li>
-                    <li><span class="buu_help-ability-name">${_("General")}</span>: ${_("Forces the bus to depart immediately. Sends any Lovers on that bus to the Unhappies!")}</li>
+                    <li><span class="buu_help-ability-name">${_("General")}</span>: ${_("Forces the bus to depart immediately. If a Lover is alone on the bus, they go to the Unhappies (a pair stays safe)!")}</li>
                     <li><span class="buu_help-ability-name">${_("Star")}</span>: ${_("At the start of your turn, you can call a bus from the Garage or another player's hand.")}</li>
                     <li><span class="buu_help-ability-name">${_("Drunkard")}</span>: ${_("When the bus departs, he sends 2 other passengers from that bus to the Unhappies.")}</li>
                     <li><span class="buu_help-ability-name">${_("Backpacker")}</span>: ${_("Wild color. Can board any bus.")}</li>
@@ -1308,6 +1321,9 @@ export class Game {
         document.querySelectorAll(selector).forEach(el => {
             if (type === 'any' || el.dataset.type === type) {
                 el.classList.toggle('buu_selectable', selectable);
+                if (!selectable) {
+                    el.classList.remove('buu_unselectable-visual');
+                }
             }
         });
     }
@@ -1316,6 +1332,13 @@ export class Game {
         const el = document.getElementById(`card-${cardId}`);
         if (!el) return;
         el.classList.toggle('buu_selected', selected);
+        
+        // If it's a bus on the platform, toggle class on its stack container
+        const stack = el.closest('.buu_bus-stack');
+        if (stack) {
+            stack.classList.toggle('buu_selected-stack', selected);
+        }
+
         const orderEl = el.querySelector('.buu_card-selection-order');
         if (orderEl) {
             orderEl.textContent = order ? order : '';
@@ -1327,6 +1350,9 @@ export class Game {
             el.classList.remove('buu_selected');
             const orderEl = el.querySelector('.buu_card-selection-order');
             if (orderEl) orderEl.textContent = '';
+        });
+        document.querySelectorAll('.buu_bus-stack.buu_selected-stack').forEach(el => {
+            el.classList.remove('buu_selected-stack');
         });
     }
 
@@ -1826,6 +1852,11 @@ export class Game {
         html += `</div>`;
         dialog.setContent(html);
         dialog.show();
+
+        const underlayId = 'popin_roundScoringDialog_underlay';
+        if (document.getElementById(underlayId)) {
+            document.getElementById(underlayId).addEventListener('click', () => dialog.hide());
+        }
     }
 
     notif_newRound(args) {

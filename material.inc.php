@@ -75,7 +75,7 @@ $this->passenger_types = [
     PASSENGER_GENERAL => [
         'name' => clienttranslate('The General'),
         'capacity' => 1,
-        'description' => clienttranslate('Causes the bus to depart immediately. Sends Lovers in the bus to Unhappies.'),
+        'description' => clienttranslate('Causes the bus to depart immediately. If a Lover is alone on the bus, they go to the Unhappies (a pair stays safe).'),
     ],
     PASSENGER_STAR => [
         'name' => clienttranslate('The Star'),

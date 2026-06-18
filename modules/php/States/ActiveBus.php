@@ -70,8 +70,8 @@ class ActiveBus extends GameState
             }
         }
 
-        // A platform bus is "productive" if it's not stalled OR if we have a General
-        $productivePlatformBuses = array_filter($platformBuses, fn($b) => !$this->game->isBusStalled($b->id) || $hasGeneral);
+        // A platform bus is "productive" if it's not stalled
+        $productivePlatformBuses = array_filter($platformBuses, fn($b) => !$this->game->isBusStalled($b->id));
         
         // Check if any passenger can board from hand or WR to ANY bus
         $handPassengers = array_filter($handCards, fn($c) => $c->type === 'passenger');
@@ -209,7 +209,7 @@ class ActiveBus extends GameState
         
         // 5. Set as active bus
         $this->game->setGameStateValue('active_bus_id', $busId);
-        $this->game->setGameStateValue('boarding_happened', 0); // Reset for this new bus
+        $this->game->setGameStateValue('boarding_happened', 1); // Star has boarded! Avoid penalty.
 
         $this->game->bga->playerStats->inc('star_abilities_activated', 1, $playerId);
 
@@ -237,6 +237,9 @@ class ActiveBus extends GameState
     {
         $playerId = (int) $this->game->getActivePlayerId();
         
+        $handCards = $this->game->cards->getCardsInLocation('hand', $playerId);
+        $hasGeneral = !empty(array_filter($handCards, fn($c) => $c->type === 'passenger' && $c->type_arg % 10 === PASSENGER_GENERAL));
+
         // Check if card is in hand or platform
         $sql = "SELECT * FROM card WHERE card_id = $cardId";
         $cardRow = $this->game->getObjectFromDB($sql);
@@ -256,8 +259,8 @@ class ActiveBus extends GameState
              throw new UserException($this->game->_("This bus is not available"));
         }
 
-        if ($cardRow['card_location'] === 'platform' && $this->game->isBusStalled($cardId) && !$hasGeneral) {
-             throw new UserException($this->game->_("This bus is stalled and cannot be selected unless you have a General to fix it"));
+        if ($cardRow['card_location'] === 'platform' && $this->game->isBusStalled($cardId)) {
+             throw new UserException($this->game->_("This bus is stalled and cannot be selected"));
         }
 
         // If it was in hand, move it to platform

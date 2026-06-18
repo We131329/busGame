@@ -446,14 +446,31 @@ class Game extends \Bga\GameFramework\Table
         $passengers = $this->cards->getCardsInLocation('in_bus', $busId);
         $activePlayerId = (int) $this->getActivePlayerId();
 
-        // Special logic for General: Lovers go to Unhappies
+        // Special logic for General: Unpaired Lovers go to Unhappies
         if ($isGeneral) {
-            foreach ($passengers as $key => $p) {
-                if ($p->type_arg % 10 == PASSENGER_LOVERS) {
+            $loversByColor = [];
+            foreach ($passengers as $p) {
+                if ((int)$p->type_arg % 10 == PASSENGER_LOVERS) {
+                    $color = (int) ($p->type_arg / 10);
+                    $loversByColor[$color][] = $p;
+                }
+            }
+
+            foreach ($loversByColor as $color => $colorLovers) {
+                if (count($colorLovers) % 2 != 0) {
+                    // One lover is unpaired (assumed max 2 total exist per color in bus)
+                    $p = $colorLovers[0];
                     $this->cards->moveCard($p->id, 'unhappies', $activePlayerId);
-                    unset($passengers[$key]);
                     
-                    $this->bga->notify->all("passengerToUnhappies", clienttranslate('Lovers are unhappy because of the General!'), [
+                    // Remove from the local passengers list so they don't count for normal departure
+                    foreach ($passengers as $key => $pass) {
+                        if ($pass->id == $p->id) {
+                            unset($passengers[$key]);
+                            break;
+                        }
+                    }
+                    
+                    $this->bga->notify->all("passengerToUnhappies", clienttranslate('A Lover is unhappy because of the General and being alone!'), [
                         "passenger_id" => $p->id,
                         "player_id" => $activePlayerId,
                     ]);

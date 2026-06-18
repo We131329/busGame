@@ -133,6 +133,11 @@
     max-width: 800px !important;
 }
 
+#popin_bgaHelpDialog_underlay,
+#popin_roundScoringDialog_underlay {
+    cursor: pointer;
+}
+
 @media (max-width: 900px) {
     #bgaHelpDialog {
         width: 98% !important;
@@ -175,12 +180,21 @@
     outline: 4px solid orange;
     animation: pulse 1.5s infinite;
     border-radius: 8px;
+    z-index: 50;
 }
 
 .buu_card.buu_selected {
     outline: 4px solid #2ecc71;
     transform: scale(1.05);
     border-radius: 8px;
+    z-index: 1 !important;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.buu_bus-stack.buu_selected-stack {
+    transform: translateY(-12px);
+    z-index: 500;
+    transition: transform 0.3s ease;
 }
 
 .buu_card.buu_unselectable-visual {
@@ -227,7 +241,11 @@
 .buu_card.buu_arg-0 { background-position-x: 0%; }          /* Anon (Col 1) */
 .buu_card.buu_arg-1 { background-position-x: 14.285%; }    /* Surfer (Col 2) */
 .buu_card.buu_arg-7 { background-position-x: 28.571%; }    /* Corrupter (Col 3) */
-.buu_card.buu_arg-6 { background-position-x: 28.571%; }    /* Backpacker (assumed Col 3) */
+.buu_card.buu_arg-6 { 
+    background-image: url('img/special.png');
+    background-size: 300% 100%;
+    background-position: 0% 0% !important;
+} /* Backpacker (Col 1 of special.png) */
 .buu_card.buu_arg-5 { background-position-x: 42.857%; }    /* Drunkard (Col 4) */
 .buu_card.buu_arg-3 { background-position-x: 57.142%; }    /* General (Col 5) */
 .buu_card.buu_arg-2 { background-position-x: 71.428%; }    /* Lovers (Col 6) */
@@ -282,14 +300,14 @@
     width: 100%;
     background: transparent;
     padding: 0;
-    z-index: 10;
+    z-index: 30; /* Higher than bus card (z-index 11) and toggle (z-index 20) */
     align-items: center;
 }
 
 /* Default state: Accordion (overlapping) */
 .buu_bus-inner .buu_card {
     margin-top: -105px; 
-    z-index: 11;
+    z-index: 31; /* Even higher to ensure it's on top of EVERYTHING else in the stack */
 }
 
 .buu_bus-inner .buu_card:first-child {
@@ -304,10 +322,12 @@
     box-shadow: 0 4px 15px rgba(0,0,0,0.4);
     width: auto;
     min-width: 110px;
+    z-index: 1000; /* On top of other buses when expanded */
 }
 
 .buu_bus-inner.buu_expanded .buu_card {
     margin-top: 10px;
+    z-index: 1001;
 }
 
 .buu_bus-inner.buu_expanded .buu_card:first-child {
@@ -325,7 +345,7 @@
     color: white;
     border: none;
     cursor: pointer;
-    z-index: 20;
+    z-index: 50; /* Above the bus card but potentially below expanded content if needed, but 50 is safe for the button */
 }
 
 /* Tables and Panels */
